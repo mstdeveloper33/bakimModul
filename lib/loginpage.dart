@@ -39,56 +39,78 @@ class _LoginPageState extends State<LoginPage> {
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextField(
-                onChanged: (value) {
-                  butonKontrol();
-                },
-                controller: emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                textInputAction: TextInputAction.next,
+          child: Card(
+            color: Colors.blueGrey.shade200,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextField(
+                    onChanged: (value) {
+                      butonKontrol();
+                    },
+                    controller: emailController,
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    onChanged: (value) {
+                      butonKontrol();
+                    },
+                    controller: passwordController,
+                    decoration: const InputDecoration(
+                      labelText: 'Şifre',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                    ),
+                    obscureText: true,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                      //! burada kullanıcının öncelikle textfieldları boş geçmemesi için bir kontrol yaptırılmıştır.
+                      //! daha sonra kullanıcının apideki bilgilerinin kontrol edildiği service sınıfındaki loginmod fonksiyonu ile girişi sağlanmıştır.
+              
+                      onPressed: butonDurumu
+                          ? () async {
+                              ResponseModel? response =
+                                  await widget.apiservice.loginmod(
+                                context,
+                                emailController.text,
+                                passwordController.text,
+                              );
+                              if (response != null) {
+                                await saveTokenToStorage(response.token);
+                                await saveUserIdToStorage(
+                                    response.userId.toString());
+                                await saveUserNameToStorage(response.userName);
+              
+                                // ignore: use_build_context_synchronously
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HomePage(),
+                                  ),
+                                );
+                              }
+                            }
+                          : null,
+                      child: const Text("giriş"))
+                ],
               ),
-              TextField(
-                onChanged: (value) {
-                  butonKontrol();
-                },
-                controller: passwordController,
-                decoration: const InputDecoration(labelText: 'Şifre'),
-                obscureText: true,
-                textInputAction: TextInputAction.next,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                  //! burada kullanıcının öncelikle textfieldları boş geçmemesi için bir kontrol yaptırılmıştır. 
-                  //! daha sonra kullanıcının apideki bilgilerinin kontrol edildiği service sınıfındaki loginmod fonksiyonu ile girişi sağlanmıştır.
-
-                  onPressed: butonDurumu
-                      ? () async {
-                          ResponseModel? response =
-                              await widget.apiservice.loginmod(
-                            context,
-                            emailController.text,
-                            passwordController.text,
-                          );
-                          if (response != null) {
-                            await saveTokenToStorage(response.token);
-                            await saveUserIdToStorage(response.userId.toString());
-                            await saveUserNameToStorage(response.userName);
-                             
-                            // ignore: use_build_context_synchronously
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => HomePage(),
-                              ),
-                            );
-                          }
-                        }
-                      : null,
-                  child: const Text("giriş"))
-            ],
+            ),
           ),
         ),
       ),

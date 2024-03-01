@@ -11,7 +11,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(appBarTheme: AppBarTheme(centerTitle:true,backgroundColor: Colors.red, elevation: 0),
+      theme: ThemeData.light().copyWith(appBarTheme: AppBarTheme(centerTitle:true,backgroundColor: Colors.blueGrey.shade200, elevation: 0),
+      scaffoldBackgroundColor: Colors.blueGrey.shade100
       
        ),
       
