@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       
       routes: {
        
-        '/anasayfa' : (context) =>  HomePage(),
+        '/anasayfa' : (context) =>  HomePage(), 
       },
       title: 'Material App',
       home: LoginPage()
